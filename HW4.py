@@ -1,5 +1,5 @@
 # HW4.py
-# Author:
+# Author: Dylan Nhan
 
 ### README
 # This file contains buggy functions that you need to fix.
@@ -27,11 +27,12 @@ def add(a: float, b: float) -> float:
     Returns:
         float: the sum of a and b
     """
-    return a - b
-
+    return a + b
+print(add(3, 2))
+print(add(0, 5))
 
 # Where is the bug in the buggy function?
-# A:
+# A: 30: The function was returning a - b instead of a + b
 
 
 def subtract(a: float, b: float) -> float:
@@ -44,11 +45,13 @@ def subtract(a: float, b: float) -> float:
     Returns:
         float: the difference of a and b
     """
-    return a + b
+    return a - b
+print(subtract(5, 3))  
+print(subtract(3, 5)) 
 
 
 # Where is the bug in the buggy function?
-# A:
+# A: 47: The function was returning a + b instead of a - b
 
 
 def divide(a, b):
@@ -61,11 +64,12 @@ def divide(a, b):
     Returns:
         float: the quotient of a and b
     """
-    return a * b
-
+    return a / b
+print(divide(6, 2))
+#print(divide(1, 0))
 
 # Where is the bug in the buggy function?
-# A:
+# A: 65: The function was returning a * b instead of a / b
 
 
 def multiply(a: float, b: float) -> float:
@@ -78,11 +82,12 @@ def multiply(a: float, b: float) -> float:
     Returns:
         float: the product of a and b
     """
-    return a / b
-
+    return a * b
+print(multiply(4, 3))
+print(multiply(4, 0))
 
 # Where is the bug in the buggy function?
-# A:
+# A: 82: The function was returning a / b instead of a * b
 
 
 def greet(name: str) -> str:
@@ -94,11 +99,13 @@ def greet(name: str) -> str:
     Returns:
         _type_: the greeting message
     """
-    return "Heloo, " + name + "!"
+    return "Hello, " + name + "!"
+print(greet("John")) 
+print(greet("Doe"))  
 
 
 # Where is the bug in the buggy function?
-# A:
+# A: 102: The function was returning "Heloo, " + name instead of "Hello, " + name + "!"
 
 
 def square(num: int) -> int:
@@ -110,11 +117,13 @@ def square(num: int) -> int:
     Returns:
         int: the square of the number
     """
-    return num + num
+    return num * num
+print(square(4))
+print(square(0))
 
 
 # Where is the bug in the buggy function?
-# A:
+# A: 120: The function was returning num + num instead of num * num
 
 
 def is_even(num: int) -> bool:
@@ -126,11 +135,13 @@ def is_even(num: int) -> bool:
     Returns:
         bool: True if the number is even, False otherwise
     """
-    return num % 2 == 1
+    return num % 2 == 0
+print(is_even(4))
+print(is_even(3))
 
 
 # Where is the bug in the buggy function?
-# A:
+# A: 138: The function was returning num % 2 == 1 instead of num % 2 == 0
 
 
 def grade_calculator(score: float) -> str:
@@ -142,11 +153,13 @@ def grade_calculator(score: float) -> str:
     Returns:
         str: the grade for the score
     """
-    if 90 <= score <= 100:
+    if score > 100 or score < 0:
+        return "Invalid Score"
+    elif 90 <= score <= 100:
         return "A"
     elif 80 <= score < 90:
         return "B"
-    elif 70 <= score < 79:
+    elif 70 <= score <= 79:
         return "C"
     elif 60 <= score < 70:
         return "D"
@@ -154,11 +167,17 @@ def grade_calculator(score: float) -> str:
         return "F"
     else:
         return "Invalid Score"
-
+print(grade_calculator(95))
+print(grade_calculator(85)) 
+print(grade_calculator(75)) 
+print(grade_calculator(79)) 
+print(grade_calculator(65)) 
+print(grade_calculator(50)) 
+print(grade_calculator(105))    
+print(grade_calculator(-5))
 
 # Where is the bug in the buggy function?
-# A:
-
+# A: 160: The function was returning "C" for score < 79 instead of score <= 79 (missing = sign), and missing condition for score < 0 and score > 100
 
 def speed_check(speed: float) -> str:
     """Check if the speed is within the speed limit
@@ -172,16 +191,20 @@ def speed_check(speed: float) -> str:
     # Assuming general speed limits: min: 20, max: 70 (in mph)
     if speed < 20:
         return "Too slow"
-    elif 20 <= speed <= 60:
+    elif 20 <= speed <= 70:
         return "Within limit"
     elif speed > 70:
         return "Over speed limit"
     else:
         return "Unknown"
+print(speed_check(10))
+print(speed_check(50))
+print(speed_check(80))
+print(speed_check(65))
 
 
 # Where is the bug in the buggy function?
-# A:
+# A: 194: The function was returning "Within limit" for speed <= 60 instead of speed <= 70
 
 
 def is_leap_year(year: int) -> bool:
@@ -194,17 +217,22 @@ def is_leap_year(year: int) -> bool:
         bool: True if the year is a leap year, False otherwise
     """
     if year % 4 == 0:
-        return True
-    elif year % 100 == 0:
-        return False
-    elif year % 400 == 0:
-        return True
+        if year % 100 == 0:
+            if year % 400 == 0:
+               return True
+            else:
+                return False
+        else:    
+            return True
     else:
         return False
-
+print(is_leap_year(2020))
+print(is_leap_year(2021))
+print(is_leap_year(2000))
+print(is_leap_year(1900))
 
 # Where is the bug in the buggy function?
-# A:
+# A: 220 - 225: The function was incorrectly ordered and needed to be placed right after each condition to check for leap years. 
 
 
 def main():
