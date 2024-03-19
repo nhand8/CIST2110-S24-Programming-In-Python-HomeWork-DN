@@ -1,0 +1,39 @@
+def snake_game(size: int = 5) -> None:
+    """
+    Simulates a simple text-based snake game.
+
+    Parameters:
+        size (int): The initial size of the snake. The default size is 5.
+
+    Returns:
+        None
+    """
+    snake = '=' * size + '>~'  # Initialize the snake
+    
+    print("Snake with starting size:", size)
+    print(snake)
+    
+    while True:
+        print("a. Make snake bigger")
+        print("b. Make snake smaller")
+        print("q. Exit")
+        
+        choice = input("Enter your choice: ").lower()
+        
+        if choice == 'a':
+            size += 5
+        elif choice == 'b':
+            size = max(size - 5, 1)  # Ensure snake size doesn't go below 1
+        elif choice == 'q':
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter 'a', 'b', or 'q'.")
+            continue
+        
+        snake = '=' * size + '>~'  # Update the snake
+        
+        print("snake is now:")
+        print(snake)
+
+snake_game()
