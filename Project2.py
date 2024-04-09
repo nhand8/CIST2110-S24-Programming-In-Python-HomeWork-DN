@@ -1,5 +1,5 @@
 # Project 2
-# Name:
+# Name: Dylan Nhan
 # Project 2 will test on topics learned in class so far. You will be creating a contact list program with an external csv file that will store the contacts. MAKE YOUR LIFE EASIER AND ENABLE WORDWRAP! VIEW -> WORD WRAP.
 #
 # The program will have the following features:
@@ -80,21 +80,163 @@ print("Welcome to the Contact List Program")
 
 
 def main():
-    """Add Code here to call the functions and run the program"""
-    pass  # Remove this line when you start writing your code
-
+    """
+    The main function will be used to run the program.
+    The main function will use a while loop to display the menu and get the user's choice.
+    The main function will call the appropriate function based on the user's choice.
+    The main function will also call the save_csv function to save the contacts to the csv file before the program ends."""
+    contacts = import_csv("contacts.csv")
+    while True:
+        print("1. Add contact")
+        print("2. View contacts")
+        print("3. Delete contact")
+        print("4. Save contacts to csv file")
+        print("5. Next Birthday")
+        print("0. Quit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            name = input("Enter the name: ")
+            phone = input("Enter the phone number: ")
+            email = input("Enter the email address: ")
+            birthday = input("Enter the birthday (mm/dd/yyyy): ")
+            if add_contact(name, phone, email, birthday, contacts):
+                print("Contact added successfully")
+        elif choice == '2':
+            view_contacts(contacts)
+        elif choice == '3':
+            name = input("Enter the name of the contact to delete: ")
+            if delete_contact(name, contacts):
+                print("Contact deleted successfully")
+        elif choice == '4':
+            if save_csv(contacts):
+                print("Contacts saved successfully")
+        elif choice == '5':
+            next_birthday(contacts)
+        elif choice == '0':
+            if save_csv(contacts):
+                print("Contacts saved successfully")
+            break
+        else:
+            print("Invalid choice. Please try again")
+def import_csv(filename):
+    """
+    This function will import the contacts from the csv file. The function will return a dictionary of contacts.
+    """
+    contacts = {}
+    try:
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            next(reader)
+            for row in reader:
+                contacts[row[0]] = {'Phone': row[1], 'Email': row[2], 'Birthday': dt.datetime.strptime(row[3], '%m/%d/%Y')}
+        print("Contacts imported successfully")
+    except FileNotFoundError:
+        print("Error: File not found")
+    return contacts
+def add_contact(name, phone, email, birthday, contacts):
+    """
+    This function will add a contact to the dictionary. 
+    The function will return True if the contact was added and False if the contact was not added. 
+    The function will display an error message if the contact already exists.
+    """
+    if name in contacts:
+        print("Error: Contact already exists")
+        return False
+    contacts[name] = {'Phone': phone, 'Email': email, 'Birthday': dt.datetime.strptime(birthday, '%m/%d/%Y')}
+    return True
+def view_contacts(contacts):
+    """
+    This function will display the contacts in the dictionary. 
+     The function will display a message if there are no contacts in the dictionary. 
+    The contacts are displayed in a table format sorted by name.
+    """
+    if not contacts:
+        print("No contacts in the dictionary")
+        return
+    print("{:<20} {:<15} {:<30} {:<15}".format("Name", "Phone", "Email", "Birthday"))
+    print("{:<20} {:<15} {:<30} {:<15}".format("----", "-----", "-----", "--------"))
+    for key, value in contacts.items():
+        print("{:<20} {:<15} {:<30} {:<15}".format(key, value['Phone'], value['Email'], value['Birthday'].strftime('%m/%d/%Y')))
+def delete_contact(name, contacts):
+    """
+    This function will delete a contact from the dictionary.
+    The function will return True if the contact was deleted and False if the contact was not deleted.
+    The function will display an error message if the contact does not exist.
+    """
+    if name in contacts:
+        del contacts[name]
+        return True
+    else:
+        print("Error: Contact does not exist")
+        return False
+def next_birthday(contacts):
+    """
+    This function will display the next birthday.
+    The function will display a message if there are no contacts in the dictionary.
+    The function will display a message if there are no birthdays in the next 30 days.
+    """
+    if not contacts:
+        print("No contacts in the dictionary")
+        return
+    today = dt.datetime.today()
+    next_birthday = None
+    for key, value in contacts.items():
+        birthday = value['Birthday']
+        birthday = birthday.replace(year=today.year)
+        if birthday < today:
+            birthday = birthday.replace(year=today.year + 1)
+        if today <= birthday <= today + dt.timedelta(days=30):
+            if next_birthday is None or birthday < next_birthday:
+                next_birthday = birthday
+                next_name = key
+    if next_birthday is None:
+        print("No birthdays in the next 30 days")
+    else:
+        print("Next birthday is {} on {}".format(next_name, next_birthday.strftime('%m/%d/%Y')))
+def save_csv(contacts):
+    """
+    This function will save the contacts to the csv file.
+    """
+    filename = input("Enter a filename to save the contacts to: ")
+    try:
+        with open(filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["Name", "Phone", "Email", "Birthday"])
+            for key, value in contacts.items():
+                writer.writerow([key, value['Phone'], value['Email'], value['Birthday'].strftime('%m/%d/%Y')])
+        return True
+    except:
+        print("Error: Unable to save contacts")
+        return False
     # After you are done with the program, answer the following questions using code (show your code and output):
     # How many names start with the letter A?
-
+def count_names_starting_with_A(contacts):
+    count = 0
+    for key in contacts:
+        if key[0].lower() == 'a':
+            count += 1
+    return count
     # How many emails are yahoo emails?
-
+def count_yahoo_emails(contacts):
+    count = 0
+    for value in contacts.values():
+        if value['Email'].endswith('@yahoo.com'):
+            count += 1
+    return count
     # How many .org emails are there?
-
+def count_org_emails(contacts):
+    count = 0
+    for value in contacts.values():
+        if value['Email'].endswith('.org'):
+            count += 1
+    return count
     # How many contacts have a birthday in January?
-
-
+def count_birthdays_in_january(contacts):
+    count = 0
+    for value in contacts.values():
+        if value['Birthday'].month == 1:
+            count += 1
+    return count
 # Final Note: You will want to utilize code from other labs, homeworks, and projects. The Bank Account Program will be a good resource for the menu and main function. Use try except statements when possible.
-
-
 if __name__ == "__main__":
     main()
